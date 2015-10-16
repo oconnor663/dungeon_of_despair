@@ -422,7 +422,13 @@
 
 ;;This function will be called by the callback that is created
 ;;when every player object is created.
+
 (define (turn player exp)
+  (with-handlers
+      ([(lambda (exn) #t) (lambda (exn) (printf "ERROR! Did you use the wrong number of arguments, Michaelson?"))])
+      (turn-inner player exp)))
+
+(define (turn-inner player exp)
   (cond ((quit? exp) (ask clock 'RESET) (set! *quit* 1))
         ((move? exp) (do-move player exp))
         ((attack? exp) (do-attack player exp))
